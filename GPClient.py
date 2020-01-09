@@ -1,3 +1,4 @@
+import copy
 import urllib.request
 import json
 
@@ -24,12 +25,28 @@ def send_request(message):
     req = urllib.request.Request(URL, data=app_json, headers={'content-type': 'application/json'})
     response = urllib.request.urlopen(req)
 
-    return float(response.read().decode('utf8'))
+    return response.read().decode('utf8')
 
 
 def calculate_fitness(instance, playing_against_random_player):
     instance['rand'] = 1 if playing_against_random_player else 0
-    return send_request(instance)
+    return float(send_request(instance))
 
 
-print(calculate_fitness(optimal_instance, True))
+def calculate_fitness_for_population(population, playing_against_random_player):
+    population['rand'] = 1 if playing_against_random_player else 0
+    return send_request(population)
+
+
+optimal_population = []
+for i in range(0, 5):
+    copy_of_instance = copy.deepcopy(optimal_instance)
+    copy_of_instance['id'] = i
+    optimal_population.append(copy_of_instance)
+
+data_to_send = {
+    "population": optimal_population
+}
+
+
+print(calculate_fitness_for_population(data_to_send, True))
