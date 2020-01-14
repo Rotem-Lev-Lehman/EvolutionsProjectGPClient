@@ -2,6 +2,7 @@ import operator
 import numpy
 import json
 import random
+import time
 
 from deap import algorithms
 from deap import base
@@ -13,11 +14,14 @@ from classes import *
 from GPClient import calculate_fitness
 
 
+playingAgainstRandomPlayer = True
+
+
 def evalTicTacToeGP(individual):
     func = toolbox.compile(expr=individual)
     json_string = str(func(0).root)
     json_obj = json.loads(json_string)
-    fitness = calculate_fitness(json_obj, True)
+    fitness = calculate_fitness(json_obj, playingAgainstRandomPlayer)
     return fitness,
 
 
@@ -110,6 +114,7 @@ toolbox.register("select", tools.selTournament, tournsize=5)
 
 
 def main():
+    global playingAgainstRandomPlayer
     '''
     m = 0.01 c= 0.7 n = 100
     m = 0.001 c= 0.7 n = 100
@@ -125,8 +130,9 @@ def main():
     m = 0.01 c= 0.4 n = 10
     m = 0.001 c= 0.4 n = 10
     '''
+    start_time = time.time()
 
-    pop = toolbox.population(n=50)
+    pop = toolbox.population(n=100)
     hof = tools.HallOfFame(1)
     stats = tools.Statistics(lambda ind: ind.fitness.values)
     stats.register("Avg", numpy.mean)
@@ -134,12 +140,32 @@ def main():
     stats.register("Best", numpy.max)
     stats.register("Worst", numpy.min)
 
-    algorithms.eaSimple(pop, toolbox, cxpb=0.4, mutpb=0.01, ngen=100, stats=stats, halloffame=hof, verbose=True)
+    print("training against random player:")
+    algorithms.eaSimple(pop, toolbox, cxpb=0.7, mutpb=0.01, ngen=100, stats=stats, halloffame=hof, verbose=True)
 
+    func = toolbox.compile(expr=hof.__getitem__(0))
+    print(str(func(0).root))
+
+    print()
+    print("training against optimal from now on:")
+    for i in range(len(pop)):
+        pop[i].fitness.values = ()
+
+    hof = tools.HallOfFame(1)
+    stats = tools.Statistics(lambda ind: ind.fitness.values)
+    stats.register("Avg", numpy.mean)
+    stats.register("Median", numpy.median)
+    stats.register("Best", numpy.max)
+    stats.register("Worst", numpy.min)
+    playingAgainstRandomPlayer = False
+    algorithms.eaSimple(pop, toolbox, cxpb=0.7, mutpb=0.01, ngen=50, stats=stats, halloffame=hof, verbose=True)
     print(hof.__getitem__(0))
     func = toolbox.compile(expr=hof.__getitem__(0))
 
     print(str(func(0).root))
+
+    end_time = time.time()
+    print("Total time = " + str(end_time - start_time))
 
     return pop, stats, hof
 
