@@ -166,50 +166,58 @@ class wait_forf:
 
 
 class requestl1:
-    def __init__(self, Ol, priority):
+    def __init__(self, Ol):
         self.Ol = Ol
-        self.priority = priority
 
     def __str__(self):
-        return "bp.sync({request:[" + str(self.Ol) + "]}," + str(self.priority) + ");"
+        global currentWeightIndex, weights
+        curr_weight = str(weights[currentWeightIndex])
+        currentWeightIndex = (currentWeightIndex + 1) % 10
+        return "bp.sync({request:[" + str(self.Ol) + "]}," + curr_weight + ");"
     __repr__ = __str__
 
 
 class requestl2:
-    def __init__(self, Ol1, Ol2, priority):
+    def __init__(self, Ol1, Ol2):
         self.Ol1 = Ol1
         self.Ol2 = Ol2
-        self.priority = priority
 
     def __str__(self):
-        return "bp.sync({request:[" + str(self.Ol1) + "," + str(self.Ol2) + "]}," + str(self.priority) + ");"
+        global currentWeightIndex, weights
+        curr_weight = str(weights[currentWeightIndex])
+        currentWeightIndex = (currentWeightIndex + 1) % 10
+        return "bp.sync({request:[" + str(self.Ol1) + "," + str(self.Ol2) + "]}," + curr_weight + ");"
 
     __repr__ = __str__
 
 
 class requestl3:
-    def __init__(self, Ol1, Ol2, Ol3, priority):
+    def __init__(self, Ol1, Ol2, Ol3):
         self.Ol1 = Ol1
         self.Ol2 = Ol2
         self.Ol3 = Ol3
-        self.priority = priority
 
     def __str__(self):
-        return "bp.sync({request:[" + str(self.Ol1) + "," + str(self.Ol2) + "," + str(self.Ol3) + "]}," + str(self.priority) + ");"
+        global currentWeightIndex, weights
+        curr_weight = str(weights[currentWeightIndex])
+        currentWeightIndex = (currentWeightIndex + 1) % 10
+        return "bp.sync({request:[" + str(self.Ol1) + "," + str(self.Ol2) + "," + str(self.Ol3) + "]}," + curr_weight + ");"
 
     __repr__ = __str__
 
 
 class requestl4:
-    def __init__(self, Ol1, Ol2, Ol3, Ol4, priority):
+    def __init__(self, Ol1, Ol2, Ol3, Ol4):
         self.Ol1 = Ol1
         self.Ol2 = Ol2
         self.Ol3 = Ol3
         self.Ol4 = Ol4
-        self.priority = priority
 
     def __str__(self):
-        return "bp.sync({request:[" + str(self.Ol1) + "," + str(self.Ol2) + "," + str(self.Ol3) + "," + str(self.Ol4) + "]}," + str(self.priority) + ");"
+        global currentWeightIndex, weights
+        curr_weight = str(weights[currentWeightIndex])
+        currentWeightIndex = (currentWeightIndex + 1) % 10
+        return "bp.sync({request:[" + str(self.Ol1) + "," + str(self.Ol2) + "," + str(self.Ol3) + "," + str(self.Ol4) + "]}," + curr_weight + ");"
 
     __repr__ = __str__
 
@@ -245,50 +253,57 @@ class Xf:
 
 
 class request1:
-    def __init__(self, O, priority):
+    def __init__(self, O):
         self.O = O
-        self.priority = priority
-
     def __str__(self):
-        return "bp.sync({request:[" + str(self.O) + "]}," + str(self.priority) + ");"
+        global currentWeightIndex, weights
+        curr_weight = str(weights[currentWeightIndex])
+        currentWeightIndex = (currentWeightIndex + 1) % 10
+        return "bp.sync({request:[" + str(self.O) + "]}," + curr_weight + ");"
     __repr__ = __str__
 
 
 class request2:
-    def __init__(self, O1, O2, priority):
+    def __init__(self, O1, O2):
         self.O1 = O1
         self.O2 = O2
-        self.priority = priority
 
     def __str__(self):
-        return "bp.sync({request:[" + str(self.O1) + "," + str(self.O2) + "]}," + str(self.priority) + ");"
+        global currentWeightIndex, weights
+        curr_weight = str(weights[currentWeightIndex])
+        currentWeightIndex = (currentWeightIndex + 1) % 10
+        return "bp.sync({request:[" + str(self.O1) + "," + str(self.O2) + "]}," + curr_weight + ");"
 
     __repr__ = __str__
 
 
 class request3:
-    def __init__(self, O1, O2, O3, priority):
+    def __init__(self, O1, O2, O3):
         self.O1 = O1
         self.O2 = O2
         self.O3 = O3
-        self.priority = priority
 
     def __str__(self):
-        return "bp.sync({request:[" + str(self.O1) + "," + str(self.O2) + "," + str(self.O3) + "]}," + str(self.priority) + ");"
+        global currentWeightIndex, weights
+        curr_weight = str(weights[currentWeightIndex])
+        currentWeightIndex = (currentWeightIndex + 1) % 10
+        return "bp.sync({request:[" + str(self.O1) + "," + str(self.O2) + "," + str(self.O3) + "]}," + curr_weight + ");"
 
     __repr__ = __str__
 
 
 class request4:
-    def __init__(self, O1, O2, O3, O4, priority):
+    def __init__(self, O1, O2, O3, O4):
         self.O1 = O1
         self.O2 = O2
         self.O3 = O3
         self.O4 = O4
-        self.priority = priority
 
     def __str__(self):
-        return "bp.sync({request:[" + str(self.O1) + "," + str(self.O2) + "," + str(self.O3) + "," + str(self.O4) + "]}," + str(self.priority) + ");"
+        global currentWeightIndex, weights
+        curr_weight = str(weights[currentWeightIndex])
+        currentWeightIndex = (currentWeightIndex + 1) % 10
+        return "bp.sync({request:[" + str(self.O1) + "," + str(self.O2) + "," + str(self.O3) + "," + str(self.O4) + "]}," + curr_weight + ");"
 
     __repr__ = __str__
 
@@ -313,15 +328,6 @@ class position:
 
 
 class positionf:
-    def __init__(self, num):
-        self.num = num
-
-    def __str__(self):
-        return str(self.num)
-    __repr__ = __str__
-
-
-class priority:
     def __init__(self, num):
         self.num = num
 
@@ -455,38 +461,38 @@ def wait_forfFuncX(xf):
 
 
 # request
-def request1Func(o, priority):
-    return request1(o, priority)
+def request1Func(o):
+    return request1(o)
 
 
-def request2Func(o1, o2, priority):
-    return request2(o1, o2, priority)
+def request2Func(o1, o2):
+    return request2(o1, o2)
 
 
-def request3Func(o1, o2, o3, priority):
-    return request3(o1, o2, o3, priority)
+def request3Func(o1, o2, o3):
+    return request3(o1, o2, o3)
 
 
-def request4Func(o1, o2, o3, o4, priority):
-    return request4(o1, o2, o3, o4, priority)
+def request4Func(o1, o2, o3, o4):
+    return request4(o1, o2, o3, o4)
 # done request
 
 
 # requestl
-def requestl1Func(o, priority):
-    return requestl1(o, priority)
+def requestl1Func(o):
+    return requestl1(o)
 
 
-def requestl2Func(o1, o2, priority):
-    return requestl2(o1, o2, priority)
+def requestl2Func(o1, o2):
+    return requestl2(o1, o2)
 
 
-def requestl3Func(o1, o2, o3, priority):
-    return requestl3(o1, o2, o3, priority)
+def requestl3Func(o1, o2, o3):
+    return requestl3(o1, o2, o3)
 
 
-def requestl4Func(o1, o2, o3, o4, priority):
-    return requestl4(o1, o2, o3, o4, priority)
+def requestl4Func(o1, o2, o3, o4):
+    return requestl4(o1, o2, o3, o4)
 # done requestl
 
 
@@ -513,6 +519,3 @@ def posFunc(pos):
 def posfFunc(pos):
     return pos
 
-
-def priorityFunc(priority):
-    return priority

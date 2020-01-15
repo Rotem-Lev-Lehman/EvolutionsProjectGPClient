@@ -68,15 +68,15 @@ pset.addPrimitive(wait_forlFuncO, [Ol], wait_forl)
 
 pset.addPrimitive(wait_forfFuncX, [Xf], wait_forf)
 
-pset.addPrimitive(request1Func, [O], request1)
-pset.addPrimitive(request2Func, [O, O], request2)
-pset.addPrimitive(request3Func, [O, O, O], request3)
-pset.addPrimitive(request4Func, [O, O, O, O], request4)
+pset.addPrimitive(request1Func, [O, priority], request1)
+pset.addPrimitive(request2Func, [O, O, priority], request2)
+pset.addPrimitive(request3Func, [O, O, O, priority], request3)
+pset.addPrimitive(request4Func, [O, O, O, O, priority], request4)
 
-pset.addPrimitive(requestl1Func, [Ol], requestl1)
-pset.addPrimitive(requestl2Func, [Ol, Ol], requestl2)
-pset.addPrimitive(requestl3Func, [Ol, Ol, Ol], requestl3)
-pset.addPrimitive(requestl4Func, [Ol, Ol, Ol, Ol], requestl4)
+pset.addPrimitive(requestl1Func, [Ol, priority], requestl1)
+pset.addPrimitive(requestl2Func, [Ol, Ol, priority], requestl2)
+pset.addPrimitive(requestl3Func, [Ol, Ol, Ol, priority], requestl3)
+pset.addPrimitive(requestl4Func, [Ol, Ol, Ol, Ol, priority], requestl4)
 
 pset.addPrimitive(xlFunc, [position, position], Xl)
 pset.addPrimitive(olFunc, [position, position], Ol)
@@ -87,6 +87,7 @@ pset.addPrimitive(oFunc, [position, position], O)
 
 pset.addPrimitive(posFunc, [position], position)
 pset.addPrimitive(posfFunc, [positionf], positionf)
+pset.addPrimitive(priorityFunc, [priority], priority)
 
 pset.addTerminal(0, position)
 pset.addTerminal(1, position)
@@ -94,6 +95,18 @@ pset.addTerminal(2, position)
 
 pset.addTerminal(0, positionf)
 pset.addTerminal(1, positionf)
+
+pset.addTerminal(1, priority)
+pset.addTerminal(2, priority)
+pset.addTerminal(3, priority)
+pset.addTerminal(4, priority)
+pset.addTerminal(5, priority)
+pset.addTerminal(6, priority)
+pset.addTerminal(7, priority)
+pset.addTerminal(8, priority)
+pset.addTerminal(9, priority)
+pset.addTerminal(10, priority)
+pset.addTerminal(11, priority)
 
 
 # stuff to run:
