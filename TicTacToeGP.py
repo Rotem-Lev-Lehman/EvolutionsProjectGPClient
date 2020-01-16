@@ -3,6 +3,7 @@ import numpy
 import json
 import random
 import time
+import csv
 
 from deap import algorithms
 from deap import base
@@ -13,7 +14,7 @@ from deap.gp import PrimitiveSetTyped
 from classes import *
 from GPClient import calculate_fitness
 
-
+results_folder_name = "results/"
 playingAgainstRandomPlayer = True
 
 
@@ -126,37 +127,50 @@ toolbox.register("evaluate", evalTicTacToeGP)
 toolbox.register("select", tools.selTournament, tournsize=5)
 
 
-def main():
+def save_results(experiment_name, cross_over_p, mut_p, statsRand, stats, best_ind, total_time, num_of_generations):
+    global results_folder_name
+    file_name = results_folder_name + experiment_name + ".csv"
+    with open(file_name, mode='w', newline='') as results_file:
+        results_writer = csv.writer(results_file, delimiter=',')
+
+        results_writer.writerow(["cross over p:", str(cross_over_p)])
+        results_writer.writerow(["cross over n (num of points for crossover):", str(1)])
+        results_writer.writerow(["mutation p:", str(mut_p)])
+        results_writer.writerow(["avg time for generation:", str(total_time / num_of_generations)])
+        results_writer.writerow(["time for terminating:", str(total_time)])
+        results_writer.writerow(["best individual:", best_ind])
+        results_writer.writerow(["genID", "max", "average", "median", "min"])
+        rand_list = statsRand[1]
+        for i, curr in enumerate(rand_list):
+            results_writer.writerow([str(i), str(curr["Best"]), str(curr["Avg"]), str(curr["Median"]), str(curr["Worst"])])
+
+        opt_list = stats[1]
+        for i, curr in enumerate(opt_list):
+            results_writer.writerow([str(i + len(rand_list)), str(curr["Best"]), str(curr["Avg"]), str(curr["Median"]), str(curr["Worst"])])
+
+
+def runExperiment(cross_over_p, mut_p, experiment_name):
     global playingAgainstRandomPlayer
-    '''
-    m = 0.01 c= 0.7 n = 100
-    m = 0.001 c= 0.7 n = 100
-    m = 0.01 c= 0.4 n = 100
-    m = 0.001 c= 0.4 n = 100
-    m = 0.01 c= 0.7 n = 50
-    m = 0.001 c= 0.7 n = 50
-    m = 0.01 c= 0.4 n = 50
-    m = 0.001 c= 0.4 n = 50
-    m = 0.01 c= 0.7 n = 10
 
-    m = 0.001 c= 0.7 n = 10
-    m = 0.01 c= 0.4 n = 10
-    m = 0.001 c= 0.4 n = 10
-    '''
+    num_of_generations_vs_random = 100
+    num_of_generations_vs_optimal = 50
+    population_size = 100
+
+    print("Now running the " + str(experiment_name) + " experiment on cross_over_p = " + str(cross_over_p) + ", mut_p = " + str(mut_p))
     start_time = time.time()
-
-    pop = toolbox.population(n=100)
-    hof = tools.HallOfFame(1)
-    stats = tools.Statistics(lambda ind: ind.fitness.values)
-    stats.register("Avg", numpy.mean)
-    stats.register("Median", numpy.median)
-    stats.register("Best", numpy.max)
-    stats.register("Worst", numpy.min)
+    playingAgainstRandomPlayer = True
+    pop = toolbox.population(n=population_size)
+    hofRand = tools.HallOfFame(1)
+    statsRand = tools.Statistics(lambda ind: ind.fitness.values)
+    statsRand.register("Avg", numpy.mean)
+    statsRand.register("Median", numpy.median)
+    statsRand.register("Best", numpy.max)
+    statsRand.register("Worst", numpy.min)
 
     print("training against random player:")
-    algorithms.eaSimple(pop, toolbox, cxpb=0.7, mutpb=0.01, ngen=100, stats=stats, halloffame=hof, verbose=True)
+    rand_log = algorithms.eaSimple(pop, toolbox, cxpb=cross_over_p, mutpb=mut_p, ngen=num_of_generations_vs_random, stats=statsRand, halloffame=hofRand, verbose=True)
 
-    func = toolbox.compile(expr=hof.__getitem__(0))
+    func = toolbox.compile(expr=hofRand.__getitem__(0))
     print(str(func(0).root))
 
     print()
@@ -171,16 +185,34 @@ def main():
     stats.register("Best", numpy.max)
     stats.register("Worst", numpy.min)
     playingAgainstRandomPlayer = False
-    algorithms.eaSimple(pop, toolbox, cxpb=0.7, mutpb=0.01, ngen=50, stats=stats, halloffame=hof, verbose=True)
+
+    opt_log = algorithms.eaSimple(pop, toolbox, cxpb=cross_over_p, mutpb=mut_p, ngen=num_of_generations_vs_optimal, stats=stats, halloffame=hof, verbose=True)
     print(hof.__getitem__(0))
     func = toolbox.compile(expr=hof.__getitem__(0))
 
-    print(str(func(0).root))
+    best_ind = str(func(0).root)
+    print(best_ind)
 
     end_time = time.time()
-    print("Total time = " + str(end_time - start_time))
+    total_time = end_time - start_time
+    print("Total time = " + str(total_time))
 
-    return pop, stats, hof
+    save_results(experiment_name, cross_over_p, mut_p, rand_log, opt_log, best_ind, total_time, num_of_generations_vs_random + num_of_generations_vs_optimal)
+
+
+def runExperiment3Times(cross_over_p, mut_p, name):
+    for i in range(3):
+        curr_name = name + "_" + str(i)
+        runExperiment(cross_over_p, mut_p, curr_name)
+
+
+def main():
+    runExperiment3Times(0.7, 0.1, "exp1")
+    runExperiment3Times(0.7, 0.01, "exp2")
+    runExperiment3Times(0.7, 0.001, "exp3")
+    runExperiment3Times(0.4, 0.1, "exp4")
+    runExperiment3Times(0.4, 0.01, "exp5")
+    runExperiment3Times(0.4, 0.001, "exp6")
 
 
 if __name__ == "__main__":
